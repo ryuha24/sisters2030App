@@ -20,7 +20,7 @@ export default class index extends React.Component {
 		} else {
 			return (
 				<View style={styles.container}>
-					{Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+					{Platform.OS === 'ios' && <StatusBar barStyle="light-content" />}
 					<AppNavigator
 						initialRoute={{ title: 'My Initial Scene', index: 0 }}
 					/>

@@ -3,136 +3,183 @@ import {
 	StyleSheet,
 	Text,
 	Image,
+	TextInput,
+	Dimensions,
 	View,
-	ImageBackground,
-	Animated,
-	TouchableHighlight,
-	Linking,
+	TouchableOpacity,
+	KeyboardAvoidingView,
+	ScrollView,
 } from 'react-native';
+import Slideshow from 'react-native-slideshow';
 
-export default class main extends React.Component {
-	_InstaLogin () {
-		this.props.navigation.navigate('InstaLogin');
-		// if(Expo.SecureStore.getItemAsync('_token') == null){
-		// 	this.props.navigation.navigate('InstaLogin');
-		// }else{
-		// 	this.props.navigation.navigate('Main');
-		// }
-	}
+import { connect } from "react-redux";
 
-	componentDidMount () {
-		this.animate()
+import { login } from './action';
+
+export class Main extends React.Component {
+	constructor(props) {
+		super(props);
+
+		this.state = {
+			position: 0,
+			interval: null,
+			dataSource: [
+				{
+					title: '언니들의놀이터',
+					caption: '2030언니들',
+					subcaption: '인플루언서의 집합소 트렌드를 경험하다',
+					url: 'https://pacific-hollows-64913.herokuapp.com/images/s1.png',
+				}, {
+					title: '댓글만 달면',
+					caption: '포인트가 와르르?!',
+					subcaption: '갖고싶던 제품들도 포인트로 사자!',
+					url: 'https://pacific-hollows-64913.herokuapp.com/images/s2.png',
+				}, {
+					title: '사용하고 싶은',
+					caption: '인플루언서 마케팅',
+					subcaption: '핫한 인플루언서들의 놀이터 2030언니들',
+					url: 'https://pacific-hollows-64913.herokuapp.com/images/s3.png',
+				},
+			],
+			arrowLeft: false,
+			arrowRight: false,
+		};
 	}
-	animate () {
-		this.animatedValue.setValue(0)
-		Animated.timing(
-			this.animatedValue,
-			{
-				toValue: 1,
-				duration: 2000,
-			}
-		).start()
-	}
-	render() {
-		this.animatedValue = new Animated.Value(0)
-		const opacity = this.animatedValue.interpolate({
-			inputRange: [0, 0.5, 1],
-			outputRange: [0, 1, 1]
-		})
+	_renderItem = (item) => {
 		return (
+		<View>
+			<Text>{item.title}</Text>
+			<Image source={item.image} />
+			<Text>{item.text}</Text>
+		</View>
+		);
+	}
+	_onDone = () => {
+		// User finished the introduction. Show real app through
+		// navigation or simply by controlling state
+		this.setState({ showRealApp: true });
+	}
 
-			<ImageBackground
-				source={require('../../assets/images/loding-bg.png')}
-				imageStyle={{resizeMode: 'stretch'}}
-				style={styles.backgroundImg}
-			>
-				<Animated.View
-					style={{
-						opacity,
-						flex: 1,
-						flexDirection: 'column',
-						justifyContent: 'center',
-						alignItems: 'center',
-					}}>
-					<Image
-						style={{
-							height: 100,
-							width: 120,
-							marginBottom: '30%',
-						}}
-						source={require('../../assets/images/non-logo.png')}/>
-					<TouchableHighlight
-						onPress={() => {this._InstaLogin()}}
-						style ={{
-							paddingBottom: 12,
-							paddingTop: 12,
-							paddingLeft: 50,
-							paddingRight: 50,
-							borderRadius:4,
-							borderWidth:1,
-							borderColor:'#fff',
-							backgroundColor : "rgba(255,255,255,0)",
-							marginBottom :20,
-						}}>
-						<View style={styles.loginBtn}>
-							<Image
-								style={{
-									width:20,
-									height:20,
-									marginRight: 10,
-								}}
-								source={require('../../assets/images/insta-icon.png')}
-							/>
-							<Text style={{color:'#fff',paddingTop: 2,}}>인스타로 로그인하기</Text>
-						</View>
-					</TouchableHighlight>
-					<Text
-						style={{
-							backgroundColor: 'rgba(0,0,0,0)',
-							textAlign: 'center',
-							fontSize: 12,
-							color:'#fff',
-							marginBottom:30,
-						}}
-					>
-						* 로그인하시는 경우 약관에 동의하시는 것으로 간주합니다.
-					</Text>
-					<Text style={styles.terms}>Instagram 이용약관</Text>
-					<Text style={styles.terms}>PeopleLike 이용약관</Text>
-					<View style={styles.loginBottom}>
-						<Text style={{
-							color:'rgba(255,255,255,0.5)',
-							fontSize:12,
-						}}>Copyright ⓒ 2018 the PeopleLike All rights reserved.</Text>
+
+	_InstaLogin = () => this.props.navigation.navigate('InstaLogin');
+	_join = () => this.props.navigation.navigate('Join');
+
+	state = {
+		email: '',
+		password: ''
+	};
+	handleEmail = (text) => {
+		this.setState({ email: text })
+	};
+	handlePassword = (text) => {
+		this.setState({ password: text })
+	};
+	login = () => this.props.login(this.state.email, this.state.password, this.props.navigation);
+	render() {
+		// if (this.state.showRealApp) {
+		// 	return <Main />;
+		// } else {
+		// 	return <AppIntroSlider renderItem={this._renderItem} slides={slides} onDone={this._onDone}/>;
+		// }
+		return (
+			<ScrollView style = {{flex:1, backgroundColor: 'white'}} ref = 'scroll'>
+				<Slideshow
+					dataSource={this.state.dataSource}
+					position={this.state.position}
+					overlay
+					onPositionChanged={position => this.setState({ position })}
+					height={Dimensions.get("window").height}
+					resizeMode='cover'
+				/>
+				<KeyboardAvoidingView
+					behavior='position' style = {{backgroundColor: 'white', flex: 1}}
+				>
+					<View style={styles.bottomBtn}>
+						<TextInput style = {styles.input}
+				           underlineColorAndroid = "transparent"
+				           placeholder = "아이디"
+				           placeholderTextColor = "#fff"
+				           autoCapitalize = "none"
+				           onChangeText = {this.handleEmail}/>
+
+						<TextInput style = {styles.input}
+				           underlineColorAndroid = "transparent"
+				           placeholder = "비밀번호"
+				           placeholderTextColor = "#fff"
+				           autoCapitalize = "none"
+		                   secureTextEntry={true}
+				           onChangeText = {this.handlePassword}/>
+						<TouchableOpacity
+							style={styles.loginWrap}
+							onPress = {
+								() => this.login(this.state.email, this.state.password)
+							}>
+							<Text style={styles.loginBtn}>로그인</Text>
+						</TouchableOpacity>
+						<TouchableOpacity onPress={this._join}>
+							<Text style={styles.joinBtn}>아직 회원이 아니신가요?</Text>
+						</TouchableOpacity>
 					</View>
-				</Animated.View>
-			</ImageBackground>
+				</KeyboardAvoidingView>
+			</ScrollView>
 		);
 	}
 }
 
-
 const styles = StyleSheet.create({
-	backgroundImg: {
+	input:{
+		flex:1,
+		padding:12,
+		fontSize: 15,
+		color:'#fff',
+		backgroundColor:'rgba(255,255,255,0.4)',
+		marginBottom:10,
+		borderRadius:4,
+	},
+	bottomBtn:{
+		position:'absolute',
+		bottom:0,
+		flex:1,
 		width: '100%',
-		height: '100%',
+		padding:30,
+	},
+	loginWrap:{
 		position: 'relative',
+		borderRadius:4,
+		backgroundColor:'#F2D902',
+		marginBottom:20,
 	},
 	loginBtn: {
-		flexDirection: 'row',
+		width: '100%',
+		flex:1,
+		fontSize:15,
+		fontWeight:'600',
+		textAlign:'center',
+		color:'#391D1D',
+		padding:12,
 	},
-	terms:{
-		marginTop:5,
-		color:'#fff',
-		fontSize:12,
-		fontWeight: 'bold',
+	joinBtn: {
+		color: '#fff',
+		fontSize: 13,
+		flex:1,
+		textAlign:'center',
+		textDecorationLine:'underline',
 	},
-	loginBottom:{
-		position:'absolute',
-		bottom:30,
-		left:0,
-		right:0,
-		justifyContent: 'center',
-		alignItems: 'center',
+	keyboardAvoidContainer:{
+		flex: 1,
 	}
 });
+
+function mapStateToProps (state) {
+	return {
+		screenData: state
+	}
+}
+
+function mapDispatchToProps (dispatch) {
+	return {
+		login: (email, password, navigation) => dispatch(login(email, password, navigation))
+	}
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Main);

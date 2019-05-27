@@ -45,5 +45,5 @@ export const RootStack = createStackNavigator({
 	},
 },
 {
-	// initialRouteName: Expo.SecureStore.getItemAsync('user_session') ? "Main" : "Home"
+	// initialRouteName: Expo.SecureStore.getItemAsync('userInfo') ? "Main" : "Home"
 });

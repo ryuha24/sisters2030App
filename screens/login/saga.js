@@ -69,9 +69,9 @@ function* signUp(action) {
 
 function* login(action) {
     try {
-        yield call(api, 'POST', '/users/login', {email: action.email, password: action.password});
+        let userInfo = yield call(api, 'POST', '/users/login', {email: action.email, password: action.password});
         const data = yield all({
-            user: call(api, 'GET', '/users/userInfo', {}),
+            user: call(api, 'GET', '/users/userInfo/'+userInfo.id, {}),
         });
         yield put(updateData(data));
         yield put(setMainNavigation(action.navigation));

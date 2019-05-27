@@ -27,7 +27,7 @@ export default class CommentScreen extends React.Component {
   render() {
     return (
         <WebView
-            source={{uri: 'http://kkbik.dothome.co.kr/preparing.php'}}
+            source={{uri: 'http://ec2-52-79-228-214.ap-northeast-2.compute.amazonaws.com:3000/campaign/campaignAppReview'}}
             style={{ flex: 1 }}
         />
     );

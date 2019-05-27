@@ -34,7 +34,7 @@ export default class HomeScreen extends React.Component {
 	  // const url = 'https://instagram.com'
       <WebView
           source={{
-              uri: 'http://kkbik.dothome.co.kr/',
+              uri: 'http://ec2-52-79-228-214.ap-northeast-2.compute.amazonaws.com:3000/campaign/campaignList',
           }}
           style={{ flex: 1 }}
       />

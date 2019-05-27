@@ -1,7 +1,9 @@
 const initialState = {
     data: {
         navigation: {},
-        user: {}
+        user: {},
+        instagram: {},
+        signUpInfo: {}
     },
     account: {
         login: {
@@ -9,6 +11,9 @@ const initialState = {
         },
         sign_up: {
             succeed: false
+        },
+        instagram: {
+            succeed: false,
         }
     },
 };

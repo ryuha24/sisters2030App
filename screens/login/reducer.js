@@ -2,6 +2,27 @@ import initialState from '../../reducers/initialState';
 
 export default function accountReducer (state = initialState.account, action) {
     switch (action.type) {
+        case 'CRAWLING':
+            return {
+                ...state,
+                instagram: {
+                    succeed: false,
+                }
+            };
+        case 'CRAWLING_SUCCESS':
+            return {
+                ...state,
+                instagram: {
+                    succeed: true,
+                }
+            };
+        case 'CRAWLING_FAILURE':
+            return {
+                ...state,
+                instagram: {
+                    succeed: false,
+                }
+            };
         case 'SIGN_UP':
             return {
                 ...state,

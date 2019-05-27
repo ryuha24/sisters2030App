@@ -1,11 +1,35 @@
 import React, { Component } from 'react';
 import { Text, View, StyleSheet, Alert,TextInput,TouchableOpacity,KeyboardAvoidingView,ScrollView,Platform,ImageBackground,Image} from 'react-native';
 import { Constants } from 'expo';
+import {login, signUp} from "./action";
+import {connect} from "react-redux";
+import {Main} from "./Main";
 
-export default class App extends React.Component {
+export class InstaCheck extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			email: this.props.screenData.signUpInfo.email,
+			password: this.props.screenData.signUpInfo.password,
+			nickname: this.props.screenData.signUpInfo.nickname,
+			instaId: this.props.screenData.instagram.data.instagramId,
+			follower: this.props.screenData.instagram.data.follower,
+			following: this.props.screenData.instagram.data.following,
+			profileUrl: this.props.screenData.instagram.data.profileUrl
+		}
+	}
 
-	check = () => {
-		Alert.alert('ok');
+	confirm = () => {
+		this.props.signUp(
+			this.state.nickname,
+			this.state.email,
+			this.state.password,
+			this.state.instaId,
+			this.state.follower,
+			this.state.following,
+			this.state.profileUrl,
+			this.props.navigation
+		);
 	};
 	render() {
 		const keyboardVerticalOffset = Platform.OS === 'ios' ? 60 : 0;
@@ -13,25 +37,25 @@ export default class App extends React.Component {
 
 			<ScrollView style={styles.root} contentContainerStyle={{flexGrow: 1}} keyboardShouldPersistTaps='handled'>
 				<View style={styles.content}>
-					<ImageBackground source={{uri:'https://scontent-hkg3-1.cdninstagram.com/vp/6ec19f746931590616d3b2b23e163d93/5D872542/t51.2885-19/s320x320/22580390_509743359392165_7072970572757467136_n.jpg?_nc_ht=scontent-hkg3-1.cdninstagram.com'}} imageStyle={{borderRadius: 50}} style={styles.profileImg}/>
-					<Text style={styles.instaNick}>k__james__</Text>
+					<ImageBackground source={{uri:this.props.screenData.instagram.data.profileUrl}} imageStyle={{borderRadius: 50}} style={styles.profileImg}/>
+					<Text style={styles.instaNick}>{this.props.screenData.instagram.data.instagramId}</Text>
 					<View style={styles.flexView}>
 						<View style={styles.flexViewIn}>
 							<Text style={{textAlign:'center'}}>
 								게시물
-								<Text style={{fontWeight:'bold'}}> 79</Text>
+								<Text style={{fontWeight:'bold'}}> {this.props.screenData.instagram.data.post}</Text>
 							</Text>
 						</View>
 						<View style={styles.flexViewIn}>
 							<Text style={{textAlign:'center'}}>
 								팔로워
-								<Text style={{fontWeight:'bold'}}> 79</Text>
+								<Text style={{fontWeight:'bold'}}>{this.props.screenData.instagram.data.follower}</Text>
 							</Text>
 						</View>
 						<View style={styles.flexViewIn}>
 							<Text style={{textAlign:'center'}}>
 								팔로우
-								<Text style={{fontWeight:'bold'}}> 79</Text>
+								<Text style={{fontWeight:'bold'}}>{this.props.screenData.instagram.data.following}</Text>
 							</Text>
 						</View>
 					</View>
@@ -48,7 +72,7 @@ export default class App extends React.Component {
 									</View>
 								</View>
 								<View style={{alignItems: 'flex-end',paddingTop:2,}}>
-									<Text style={{color:'#fff', fontWeight:'bold'}}>GetId</Text>
+									<Text style={{color:'#fff', fontWeight:'bold'}}>{this.props.screenData.signUpInfo.email}</Text>
 								</View>
 							</View>
 							<View style={styles.bottomBox}>
@@ -61,7 +85,7 @@ export default class App extends React.Component {
 									</View>
 								</View>
 								<View style={{alignItems: 'flex-end'}}>
-									<Text style={{color:'#fff', fontWeight:'bold'}}>GetNickName</Text>
+									<Text style={{color:'#fff', fontWeight:'bold'}}>{this.props.screenData.signUpInfo.nickname}</Text>
 								</View>
 							</View>
 							<View style={styles.bottomBox}>
@@ -74,7 +98,7 @@ export default class App extends React.Component {
 									</View>
 								</View>
 								<View style={{alignItems: 'flex-end'}}>
-									<Text style={{color:'#fff', fontWeight:'bold'}}>GetInstaId</Text>
+									<Text style={{color:'#fff', fontWeight:'bold'}}>{this.props.screenData.signUpInfo.instaId}</Text>
 								</View>
 							</View>
 						</View>
@@ -85,7 +109,7 @@ export default class App extends React.Component {
 					<View style={styles.footer}>
 						<TouchableOpacity
 							style={styles.footerBtnWrap}
-							onPress={this.check}
+							onPress={this.confirm}
 						>
 							<Text style={styles.footerBtn}>완료</Text>
 						</TouchableOpacity>
@@ -203,3 +227,18 @@ const styles = StyleSheet.create({
 		height:50,
 	},
 });
+
+function mapStateToProps (state) {
+	return {
+		screenData: state.data
+	}
+}
+
+function mapDispatchToProps (dispatch) {
+	return {
+		signUp: (nickname, email, password, instaId, follower, following, profileUrl, navigation) =>
+			dispatch(signUp(nickname, email, password, instaId, follower, following, profileUrl, navigation))
+	}
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(InstaCheck);

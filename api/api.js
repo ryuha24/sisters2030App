@@ -1,5 +1,5 @@
 const baseUri = 'http://52.79.228.214:3000';
-
+// const baseUri = 'http://192.168.219.102:3000';
 async function rootApi (method, route, args) {
     try {
         switch (method) {
@@ -17,7 +17,7 @@ async function rootApi (method, route, args) {
 async function get (route, args) {
     try {
         let user_session = await Expo.SecureStore.getItemAsync('user_session');
-        if(user_session) {
+        // if(user_session) {
             let response = await fetch(
             baseUri + route,
             {
@@ -25,10 +25,12 @@ async function get (route, args) {
                 headers: {'user_session': user_session}
             }
             );
-            return await response.json();
-        } else {
-
-        }
+            let responseJson = await response.json();
+            console.log("api", responseJson);
+            return responseJson;
+        // } else {
+        //
+        // }
     } catch (error) {
         throw error;
     }
@@ -39,7 +41,6 @@ async function get (route, args) {
 // 2. Sign up
 async function post (route, args) {
     try {
-        console.log(baseUri+route);
         let response = await fetch(
         baseUri + route,
         {

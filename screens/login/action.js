@@ -1,9 +1,28 @@
-export const signUp = (nickname, email, password, instaId, navigation) => ({
+export const crawlingInfo = (nickname, email, password, instaId, navigation) => ({
+    type: 'CRAWLING',
+    nickname: nickname,
+    email: email,
+    password: password,
+    instaId: instaId,
+    navigation: navigation
+});
+
+export const crawlingInfoSuccess = () => ({
+    type: 'CRAWLING_SUCCESS'
+});
+
+export const crawlingInfoFailure = () => ({
+    type: 'CRAWLING_FAILURE'
+});
+export const signUp = (nickname, email, password, instaId, follower, following, profileUrl, navigation) => ({
     type: 'SIGN_UP',
     nickname: nickname,
     email: email,
     password: password,
     instaId: instaId,
+    follower: follower,
+    following: following,
+    profileUrl: profileUrl,
     navigation: navigation
 });
 
@@ -29,3 +48,4 @@ export const loginSuccess = () => ({
 export const loginFailure = () => ({
     type: 'LOGIN_FAILURE'
 });
+

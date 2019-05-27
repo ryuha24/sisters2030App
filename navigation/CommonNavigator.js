@@ -26,7 +26,7 @@ export const RootStack = createStackNavigator({
 		}
 	},
 	// 인스타 확인하는 화면
-	instaCheck: {
+	InstagramCheck: {
 		screen: InstaCheck,
 		navigatorStyle: {
 			navBarHidden: false,
@@ -42,5 +42,8 @@ export const RootStack = createStackNavigator({
 		navigationOptions: {
 			header: null
 		}
-	}
+	},
+},
+{
+	// initialRouteName: Expo.SecureStore.getItemAsync('user_session') ? "Main" : "Home"
 });

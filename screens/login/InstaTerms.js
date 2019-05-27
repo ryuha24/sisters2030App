@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Text, View, StyleSheet, Alert,TextInput,TouchableOpacity,KeyboardAvoidingView,ScrollView,Platform,} from 'react-native';
-import { signUp } from "./action";
+import { crawlingInfo } from "./action";
 import { connect } from "react-redux";
 
 export class InstaTerms extends React.Component {
@@ -21,9 +21,9 @@ export class InstaTerms extends React.Component {
 	joinNickname = (nickname) => this.setState({ nickname:nickname });
 	joinInstaId = (instaId) => this.setState({ instaId:instaId });
 
-	join = () => {
+	nextStep = () => {
 		if (this.state.password === this.state.repassword) {
-			this.props.signUp(this.state.nickname, this.state.email, this.state.password,this.state.instaId, this.props.navigation);
+			this.props.crawlingInfo(this.state.nickname, this.state.email, this.state.password,this.state.instaId, this.props.navigation);
 			// Alert.alert('ok');
 			// this.props.navigation.navigate('Account');
 
@@ -86,7 +86,7 @@ export class InstaTerms extends React.Component {
 					<View style={styles.footer}>
 						<TouchableOpacity
 							style={styles.footerBtnWrap}
-							onPress={this.join}
+							onPress={this.nextStep}
 						>
 							<Text style={styles.footerBtn}>다음</Text>
 						</TouchableOpacity>
@@ -159,7 +159,7 @@ function mapStateToProps (state) {
 
 function mapDispatchToProps (dispatch) {
 	return {
-		signUp: (nickname, email, password, instaId, navigation) => dispatch(signUp(nickname, email, password, instaId, navigation))
+		crawlingInfo: (nickname, email, password, instaId, navigation) => dispatch(crawlingInfo(nickname, email, password, instaId, navigation))
 	}
 }
 

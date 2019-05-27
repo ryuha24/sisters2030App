@@ -6,12 +6,6 @@ import {connect} from "react-redux";
 import {InstaCheck} from "./login/InstaCheck";
 
 export default class HomeScreen extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            instagramProfile:""
-        }
-    }
   static navigationOptions = {
       headerStyle: {
           backgroundColor: '#fff',
@@ -34,9 +28,6 @@ export default class HomeScreen extends React.Component {
       ),
   };
 
-    componentWillMount() {
-        axios.get('http://192.168.219.102:3000/users/instagramProfile/'+user_session)
-    }
 
     render() {
     return (
